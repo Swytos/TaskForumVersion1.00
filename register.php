@@ -1,25 +1,24 @@
+<?php session_start(); ?>
 <?php
 require_once("includes/connection.php");
+
 	if(isset($_POST["register"])){
 		if(!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
-  			$full_name= htmlspecialchars($_POST['full_name']);
-			$email=htmlspecialchars($_POST['email']);
- 			$username=htmlspecialchars($_POST['username']);
- 			$password=htmlspecialchars($_POST['password']);
- 			$query=mysqli_query($con,"SELECT * FROM usertbl WHERE username='".$username."'");
-  			$numrows=mysqli_num_rows($query);
-			if($numrows==0) {
-				$sql="INSERT INTO usertbl (full_name, email, username,password)
-				VALUES('$full_name','$email', '$username', '$password')";
-  				$result=mysqli_query($con,$sql);
- 				if($result){
-					$message = "Account Successfully Created";
-				} else {
- 					$message = "Failed to insert data information!";
-  				}
-			} else {
-				$message = "That username already exists! Please try another one!";
-   			}
+  			$full_name= $_POST['full_name'];
+			$email=$_POST['email'];
+ 			$username=$_POST['username'];
+ 			$password=password_hash($_POST['password'], PASSWORD_BCRYPT);
+  			$sql_check = 'SELECT username FROM usertbl WHERE username = :username';
+  			$stmt_check = $dbh->prepare($sql_check);
+  			$stmt_check->execute( [':username' => $username] );
+  			if($stmt_check->fetchColumn()){	
+  				die ('User exists');
+  			} else {
+  				$sql_query = 'INSERT INTO usertbl (full_name, email, username, password) VALUES (:full_name, :email, :username, :password)';
+  				$stmt = $dbh->prepare($sql_query);
+  				$stmt->execute( [':full_name' => $full_name,':email' => $email, ':username' => $username, ':password' => $password] );
+  				header('location:login.php');
+  			}
 		} else {
 			$message = "All fields are required!";
 		}
@@ -32,7 +31,7 @@ require_once("includes/connection.php");
 <div class="container mregister">
 	<div id="login">
  		<h1>Registration</h1>
-		<form action="register.php" id="registerform" method="post"name="registerform">
+		<form action="register.php" id="registerform" method="post" name="registerform">
  			<p><label for="user_login">Full name<br>
  			<input class="input" id="full_name" name="full_name"size="32"  type="text" value=""></label></p>
 			<p><label for="user_pass">E-mail<br>

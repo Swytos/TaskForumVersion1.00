@@ -1,6 +1,9 @@
 <?php
-	define("DB_SERVER", "localhost");
-	define("DB_USER", "root");
-	define("DB_PASS", "");
-	define("DB_NAME", "userlistdb");
+return [
+	'host' => 'localhost',
+	'db_name' => 'userlistdb',
+	'username' => 'root',
+	'password' => '',
+	'charset' => 'utf8'
+];
 ?>

@@ -6,20 +6,15 @@ require_once("includes/connection.php");
 	}
 	if(isset($_POST["login"])){
 		if(!empty($_POST['username']) && !empty($_POST['password'])) {
-			$username=htmlspecialchars($_POST['username']);
-			$password=htmlspecialchars($_POST['password']);
-			$query =mysqli_query($con,"SELECT * FROM usertbl WHERE username='".$username."' AND password='".$password."'");
-			$numrows=mysqli_num_rows($query);
-			if($numrows!=0) {
-				while($row=mysqli_fetch_assoc($query)) {
-					$dbusername=$row['username'];
-					$dbpassword=$row['password'];
-				}
-				if($username == $dbusername && $password == $dbpassword){// старое место расположения //  session_start();
+			$username=$_POST['username'];
+			$password=$_POST['password'];
+			$sth = $dbh->prepare("SELECT * FROM usertbl WHERE username='".$username."'");
+			$sth->execute();
+			$result = $sth->fetch(PDO::FETCH_ASSOC);
+			if(password_verify($password, $result['password'])==1) {
 					$_SESSION["session_username"]=$username;
 					header('location:intropage.php');
-				}
-			} else {// $message = "Invalid username or password!";
+			} else {
 				echo "Invalid username or password!";
 			}
 		} else {
