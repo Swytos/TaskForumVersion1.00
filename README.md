@@ -2,3 +2,4 @@
 # TaskForumVersion1.01
 # TaskForumVersion2.00
 # TaskForumVersion2.01
+# TaskForumVersion3.00
