@@ -7,12 +7,13 @@ class Model_Login
 
 		require_once("A:/OSPanel/domains/ReviewBookMVS/application/connection_db/connection.php");
 
-		if(isset($_SESSION["session_username"]))
+		if(isset($_SESSION["session_id"]))
 		{
 			header('location:intropage');
 		}
 
-		if(isset($_POST["login"])){
+		if(isset($_POST["login"]))
+		{
 			if(!empty($_POST['username']) && !empty($_POST['password'])) 
 			{
 				$username=$_POST['username'];
@@ -22,14 +23,19 @@ class Model_Login
 				$result = $sth->fetch(PDO::FETCH_ASSOC);
 				if(password_verify($password, $result['password'])==1) 
 				{
+					$_SESSION["session_id"]=$result['id'];
 					$_SESSION["session_username"]=$username;
 					header('location:intropage');
 				} else {
-					echo "Invalid username or password!";
+					$message = "Invalid username or password!";
 				}
 			} else {
 				$message = "All fields are required!";
 			}
+		}
+		if (!empty($message)) 
+		{
+			echo "<p class='error'>"."MESSAGE: ".$message."</p>";
 		}
 	}
 }

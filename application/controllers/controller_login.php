@@ -1,5 +1,6 @@
 <?php
-class Controller_login {
+class Controller_login extends Model
+{
 	function __construct()
 	{
 		$this->model = new Model_Login();

@@ -21,4 +21,12 @@ class Model
 	{
 	
 	}
+	public function sendtopic()
+	{
+
+	}
+	public function sendcomment()
+	{
+
+	}
 }

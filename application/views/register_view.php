@@ -2,7 +2,7 @@
 	<div id="login">
  		<h1>Registration</h1>
 		<form action="" id="registerform" method="post" name="registerform">
- 			<p><label for="user_login">Full name<br>
+ 			<p><label for="user_login">Full name<br><?php echo $message3; ?>
  			<input class="input" id="full_name" name="full_name"size="32"  type="text" value=""></label></p>
 			<p><label for="user_pass">E-mail<br>
 			<input class="input" id="email" name="email" size="32"type="email" value=""></label></p>
